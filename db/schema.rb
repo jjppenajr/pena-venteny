@@ -10,14 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_04_073050) do
+ActiveRecord::Schema.define(version: 2020_03_04_080744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
+  create_table "addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_addresses_on_user_id"
+  end
+
   create_table "business_loans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
+    t.string "address"
     t.decimal "entry", precision: 6
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -26,6 +35,7 @@ ActiveRecord::Schema.define(version: 2020_03_04_073050) do
 
   create_table "educational_loans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
+    t.string "address"
     t.decimal "entry", precision: 6
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -34,21 +44,11 @@ ActiveRecord::Schema.define(version: 2020_03_04_073050) do
 
   create_table "multi_purpose_loans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
+    t.string "address"
     t.decimal "entry", precision: 6
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_multi_purpose_loans_on_user_id"
-  end
-
-  create_table "user_loans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id"
-    t.uuid "loan_id"
-    t.string "loan_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["loan_id"], name: "index_user_loans_on_loan_id"
-    t.index ["loan_type"], name: "index_user_loans_on_loan_type"
-    t.index ["user_id"], name: "index_user_loans_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -57,8 +57,8 @@ ActiveRecord::Schema.define(version: 2020_03_04_073050) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "addresses", "users"
   add_foreign_key "business_loans", "users"
   add_foreign_key "educational_loans", "users"
   add_foreign_key "multi_purpose_loans", "users"
-  add_foreign_key "user_loans", "users"
 end
