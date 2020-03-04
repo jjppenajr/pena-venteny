@@ -1,0 +1,2 @@
+class UserLoan < ApplicationRecord
+end
