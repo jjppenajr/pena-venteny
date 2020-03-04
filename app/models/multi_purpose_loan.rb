@@ -15,6 +15,9 @@ private
     elsif entry > 120000
       errors.add :base, "Loan exceeded. Loan amount cannot more than 120000"
       throw(:abort)
+    elsif entry % 1000 != 0
+      errors.add :base, "Loan entry must be divisible by 1000."
+      throw(:abort)
     end
   end
 
