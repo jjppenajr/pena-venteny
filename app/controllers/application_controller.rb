@@ -9,7 +9,6 @@ private
     @current_user = nil
     result = AuthenticateApiRequest.call(request.headers).result
     @current_user = result
-    binding.pry
     params[:user_id] = @current_user&.id
     render json: { error: 'Not Authorized' }, status: 401 unless @current_account
   end
