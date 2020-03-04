@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_04_080744) do
+ActiveRecord::Schema.define(version: 2020_03_04_092646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -21,6 +21,10 @@ ActiveRecord::Schema.define(version: 2020_03_04_080744) do
     t.uuid "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "loan_type"
+    t.uuid "loan_id"
+    t.uuid "main_address"
+    t.index ["loan_type", "loan_id"], name: "index_addresses_on_loan_type_and_loan_id"
     t.index ["user_id"], name: "index_addresses_on_user_id"
   end
 

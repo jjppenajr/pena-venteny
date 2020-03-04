@@ -3,6 +3,7 @@ class EducationalLoan < ApplicationRecord
 
   belongs_to :user
   has_one :user_address, through: :user, source: :address
+  has_one :address
 
   before_create :check_entry
   before_create :save_address
@@ -22,6 +23,7 @@ private
   end
 
   def save_address
-    self.address = user_address.name
+    address = address.build(main_address_id: user_address.id, name: user_address.name )
+    address.save
   end
 end
