@@ -1,8 +1,8 @@
 class EducationalLoan < ApplicationRecord
+  attr_readonly :address
+
   belongs_to :user
   has_one :user_address, through: :user, source: :address
-
-  validates :address, presence: true
 
   before_create :check_entry
   before_create :save_address
